@@ -17,8 +17,11 @@ namespace XLuaTest
     [System.Serializable]
     public class Injection
     {
+        [SerializeField]
         public string name;
+        [SerializeField]
         public GameObject value;
+        
     }
 
     [LuaCallCSharp]
@@ -26,10 +29,9 @@ namespace XLuaTest
     {
         public TextAsset luaScript;
         public Injection[] injections;
-
-        internal static LuaEnv luaEnv = new LuaEnv(); //all lua behaviour shared one luaenv only!
-        internal static float lastGCTime = 0;
-        internal const float GCInterval = 1;//1 second 
+        private  LuaEnv luaEnv = Global.luaEnv;
+        float lastGCTime = 0;
+        private float GCInterval = LuaManager.Instance.GCInterval;
 
         private Action luaStart;
         private Action luaUpdate;
@@ -82,10 +84,10 @@ namespace XLuaTest
             {
                 luaUpdate();
             }
-            if (Time.time - LuaBehaviour.lastGCTime > GCInterval)
+            if (Time.time - lastGCTime > GCInterval)
             {
                 luaEnv.Tick();
-                LuaBehaviour.lastGCTime = Time.time;
+                lastGCTime = Time.time;
             }
         }
 
