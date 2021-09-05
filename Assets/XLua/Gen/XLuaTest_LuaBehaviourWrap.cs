@@ -130,7 +130,7 @@ namespace XLua.CSObjectWrap
                 ObjectTranslator translator = ObjectTranslatorPool.Instance.Find(L);
 			
                 XLuaTest.LuaBehaviour gen_to_be_invoked = (XLuaTest.LuaBehaviour)translator.FastGetCSObj(L, 1);
-                gen_to_be_invoked.injections = (XLuaTest.Injection[])translator.GetObject(L, 2, typeof(XLuaTest.Injection[]));
+                gen_to_be_invoked.injections = (List<XLuaTest.Injection>)translator.GetObject(L, 2, typeof(List<XLuaTest.Injection>));
             
             } catch(System.Exception gen_e) {
                 return LuaAPI.luaL_error(L, "c# exception:" + gen_e);

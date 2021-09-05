@@ -20,15 +20,39 @@ namespace XLuaTest
         [SerializeField]
         public string name;
         [SerializeField]
-        public GameObject value;
-        
+        public int type;
+        [SerializeField]
+        public VariableBase variable; 
+    }
+
+    public class VariableBase
+    {
+
+    }
+
+    public class VariableGameObject : VariableBase
+    {
+        [SerializeField]
+        GameObject obj;
+        [SerializeField]
+        Component component;
+    }
+
+    public class VariableSingle : VariableBase
+    {
+        [SerializeField]
+        string value;
     }
 
     [LuaCallCSharp]
     public class LuaBehaviour : MonoBehaviour
     {
         public TextAsset luaScript;
-        public Injection[] injections;
+        public List<Injection> injections = new List<Injection>();
+
+        [SerializeField]
+        public List<int> intValues = new List<int>();
+
         private  LuaEnv luaEnv = Global.luaEnv;
         float lastGCTime = 0;
         private float GCInterval = LuaManager.Instance.GCInterval;
@@ -52,7 +76,7 @@ namespace XLuaTest
             scriptEnv.Set("self", this);
             foreach (var injection in injections)
             {
-                scriptEnv.Set(injection.name, injection.value);
+                scriptEnv.Set(injection.name, injection);
             }
 
             luaEnv.DoString(luaScript.text, "LuaTestScript", scriptEnv);
