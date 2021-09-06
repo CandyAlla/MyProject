@@ -94,6 +94,8 @@ public class LuaBehaviourInspector : Editor
 
         reorderableList.onRemoveCallback = OnRemoveItem;
 
+        reorderableList.onChangedCallback = OnChang;
+
         reorderableList.onSelectCallback = (ReorderableList list) =>
         {
             selectedIndex = list.index;
@@ -154,7 +156,19 @@ public class LuaBehaviourInspector : Editor
             {
                 name.stringValue = "value" + index;
             }
+            EditorGUI.BeginChangeCheck();
+            string oriName = name.stringValue;
             name.stringValue = EditorGUI.TextField(nameRect, name.stringValue);
+            if (EditorGUI.EndChangeCheck())
+            {
+                if(oriName == name.stringValue)
+                    return;
+                string curName = name.stringValue;
+                if (savedKeyValue.ContainsKey(curName))
+                    name.stringValue = oriName;
+                RefreshKeyName(oriName, name.stringValue);
+            }
+            
             EditorGUI.ObjectField(objRect, obj, GUIContent.none);
 
             var valueObj = obj.objectReferenceValue;
@@ -197,7 +211,19 @@ public class LuaBehaviourInspector : Editor
             {
                 name.stringValue = "value" + index;
             }
+            EditorGUI.BeginChangeCheck();
+            string oriName = name.stringValue;
             name.stringValue = EditorGUI.TextField(nameRect, name.stringValue);
+            if (EditorGUI.EndChangeCheck())
+            {
+                if(oriName == name.stringValue)
+                    return;
+                string curName = name.stringValue;
+                if (savedKeyValue.ContainsKey(curName))
+                    name.stringValue = oriName;
+                RefreshKeyName(oriName, name.stringValue);
+            }
+            
             str.stringValue = EditorGUI.TextField(objRect, str.stringValue);
         }
     }
@@ -235,6 +261,7 @@ public class LuaBehaviourInspector : Editor
 
     private void OnChang(ReorderableList list)
     {
+        Debug.Log(list.count);
         var luaBehaviour = target as LuaBehaviour;
         //luaBehaviour.UpdateSchema();
         //reorderableList.list = luaBehaviour.schema;
@@ -313,6 +340,20 @@ public class LuaBehaviourInspector : Editor
         }
     }
 
+    private void RefreshKeyName(string oldKey, string newKey)
+    {
+        if (savedKeyValue.ContainsKey(oldKey))
+        {
+            var value = savedKeyValue[oldKey];
+            savedKeyValue.Remove(oldKey);
+            savedKeyValue.Add(newKey,value);
+        }
+        else
+        {
+            Debug.LogError("rename fail");
+        }
+    }
+    
     private void RefreshComponents(string key , Component curCom)
     {
         if (savedKeyValue.ContainsKey(key))
@@ -380,6 +421,8 @@ public class LuaBehaviourInspector : Editor
     {
         Injection newone = new Injection();
         string name = "value" + reorderableList.count;
+        if (savedKeyValue.ContainsKey(name))
+            name += "V1";
         newone.name = name;
         newone.type = 0;
         luaBehaviour.injections.Add(newone);
