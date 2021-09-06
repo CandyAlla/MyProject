@@ -332,13 +332,19 @@ MonoBehaviour:
   - name: txt
     type: 0
     obj: {fileID: 265341609}
-    component: {fileID: 0}
+    component: {fileID: 265341611}
     value: 
   - name: str
     type: 4
     obj: {fileID: 0}
     component: {fileID: 0}
     value: print me
+  - name: cube
+    type: 0
+    obj: {fileID: 566661668279198349, guid: 66623433a265e6b46aa066d490ff77ae, type: 3}
+    component: {fileID: 985961348716700159, guid: 66623433a265e6b46aa066d490ff77ae,
+      type: 3}
+    value: 
 --- !u!4 &568755552
 Transform:
   m_ObjectHideFlags: 0
