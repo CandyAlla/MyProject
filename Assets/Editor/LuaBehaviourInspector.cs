@@ -43,6 +43,14 @@ public class LuaBehaviourInspector : Editor
             { BooleanTypeName, VariableType.BooleanType },
             { StringTypeName, VariableType.String },
         };
+    private static readonly Dictionary<VariableType,string> valueToStr = new Dictionary<VariableType,string>()
+    {
+        { VariableType.Object,ObjectTypeName },
+        { VariableType.Integer,IntegerTypeName },
+        {  VariableType.FoatType,FloatTypeName },
+        {  VariableType.BooleanType,BooleanTypeName },
+        {  VariableType.String,StringTypeName },
+    };
 
     private LuaBehaviour luaBehaviour;
 
@@ -223,8 +231,20 @@ public class LuaBehaviourInspector : Editor
                     name.stringValue = oriName;
                 RefreshKeyName(oriName, name.stringValue);
             }
+            EditorGUI.LabelField(objRect,valueToStr[(VariableType)vType.intValue]);
             
-            str.stringValue = EditorGUI.TextField(objRect, str.stringValue);
+            EditorGUI.BeginChangeCheck();
+            str.stringValue = EditorGUI.TextField(comRect, str.stringValue);
+            if (EditorGUI.EndChangeCheck())
+            {
+                if (vType.intValue == (int)VariableType.BooleanType)
+                {
+                    if (str.stringValue != "false" && str.stringValue != "true")
+                    {
+                        str.stringValue = "false";
+                    }
+                }
+            }
         }
     }
 
@@ -400,8 +420,10 @@ public class LuaBehaviourInspector : Editor
                 AddObjectValue();
                 break;
             case VariableType.Integer:
+                AddIntValue(1);
+                break;
             case VariableType.FoatType:
-                AddIntValue();
+                AddIntValue(2);
                 break;
             case VariableType.BooleanType:
                 AddBooleanValue();
@@ -427,12 +449,12 @@ public class LuaBehaviourInspector : Editor
 
     }
 
-    private void AddIntValue()
+    private void AddIntValue(int type)
     {
         Injection newone = new Injection();
         string name = "value" + reorderableList.count;
         newone.name = name;
-        newone.type = 1;
+        newone.type = type;
         newone.value = "0";
         luaBehaviour.injections.Add(newone);
         AddInjectObjs(name,0);
@@ -454,7 +476,7 @@ public class LuaBehaviourInspector : Editor
         Injection newone = new Injection();
         string name = "value" + reorderableList.count;
         newone.name = name;
-        newone.type = (int)VariableType.String;
+        newone.type = (int)VariableType.BooleanType;
         newone.value = "false";
         luaBehaviour.injections.Add(newone);
         AddInjectObjs(name,"false");

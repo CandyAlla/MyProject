@@ -152,11 +152,31 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   luaScript: {fileID: 4900000, guid: 7cfed86298c2da543b693ffd8436367a, type: 3}
   injections:
-  - name: str
+  - name: value0
+    type: 0
+    obj: {fileID: 0}
+    component: {fileID: 0}
+    value: 
+  - name: value1
+    type: 1
+    obj: {fileID: 0}
+    component: {fileID: 0}
+    value: 0
+  - name: value2
+    type: 2
+    obj: {fileID: 0}
+    component: {fileID: 0}
+    value: 0
+  - name: value3
+    type: 3
+    obj: {fileID: 0}
+    component: {fileID: 0}
+    value: true
+  - name: value4
     type: 4
     obj: {fileID: 0}
     component: {fileID: 0}
-    value: printme
+    value: 
 --- !u!4 &568755552
 Transform:
   m_ObjectHideFlags: 0
