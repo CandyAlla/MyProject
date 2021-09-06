@@ -22,7 +22,11 @@ namespace XLuaTest
         [SerializeField]
         public int type;
         [SerializeField]
-        public VariableBase variable; 
+        public GameObject obj;
+        [SerializeField]
+        public Component component;
+        [SerializeField]
+        public string value;
     }
 
     public class VariableBase
@@ -33,15 +37,15 @@ namespace XLuaTest
     public class VariableGameObject : VariableBase
     {
         [SerializeField]
-        GameObject obj;
+        public GameObject obj;
         [SerializeField]
-        Component component;
+        public Component component;
     }
 
     public class VariableSingle : VariableBase
     {
         [SerializeField]
-        string value;
+        public string value;
     }
 
     [LuaCallCSharp]

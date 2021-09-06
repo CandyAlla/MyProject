@@ -24,9 +24,11 @@ public class LuaBehaviourInspector : Editor
 
     private LuaTable luatable;
 
-    private Dictionary<string, Component> valueKey = new Dictionary<string, Component>();
+    // private Dictionary<string, Component> valueKey = new Dictionary<string, Component>();
+    //
+    // private Dictionary<string, GameObject> injectObjse = new Dictionary<string, GameObject>();
 
-    private Dictionary<string, GameObject> injectObjse = new Dictionary<string, GameObject>();
+    private Dictionary<string, object> savedKeyValue = new Dictionary<string, object>();
 
     private const string ObjectTypeName = "object";
     private const string IntegerTypeName = "int";
@@ -41,6 +43,15 @@ public class LuaBehaviourInspector : Editor
             { BooleanTypeName, VariableType.BooleanType },
             { StringTypeName, VariableType.String },
         };
+
+    private LuaBehaviour luaBehaviour;
+
+    private int selectedIndex;
+
+    private void Awake()
+    {
+        luaBehaviour = target as LuaBehaviour;
+    }
 
     private void OnEnable()
     {
@@ -62,7 +73,15 @@ public class LuaBehaviourInspector : Editor
 
         //背景色
         reorderableList.drawElementBackgroundCallback = (rect, index, isActive, isFocused) => {
-            GUI.backgroundColor = Color.green;
+            if (index == selectedIndex)
+            {
+                GUI.backgroundColor = Color.red;
+            }
+            else
+            {
+                GUI.backgroundColor = Color.green;
+            }
+           
         };
 
         //头部
@@ -73,12 +92,17 @@ public class LuaBehaviourInspector : Editor
 
         reorderableList.onAddDropdownCallback = AddItem;
 
-      
+        reorderableList.onRemoveCallback = OnRemoveItem;
+
+        reorderableList.onSelectCallback = (ReorderableList list) =>
+        {
+            selectedIndex = list.index;
+        };
     }
 
     public override void OnInspectorGUI()
     {
-        base.OnInspectorGUI();
+        // base.OnInspectorGUI();
         serializedObject.Update();
         reorderableList.DoLayoutList();
         serializedObject.ApplyModifiedProperties();
@@ -87,22 +111,14 @@ public class LuaBehaviourInspector : Editor
     private void InitPropertyList(SerializedProperty prop)
     {
         int count = reorderableList.count;
-        valueKey.Clear();
-        injectObjse.Clear();
+        savedKeyValue.Clear();
         
         for(int i = 0; i < reorderableList.count; i++)
         {
             SerializedProperty name = reorderableList.serializedProperty.GetArrayElementAtIndex(i).FindPropertyRelative("name");
-            SerializedProperty value = reorderableList.serializedProperty.GetArrayElementAtIndex(i).FindPropertyRelative("value");
-            SerializedProperty component = reorderableList.serializedProperty.GetArrayElementAtIndex(i).FindPropertyRelative("component");
-           
             string key = name.stringValue;
-            GameObject v = (GameObject)value.objectReferenceValue;
-            Component com = (Component)component.objectReferenceValue;
-
-            valueKey.Add(key, com);
-            injectObjse.Add(key, v);
-
+            
+            savedKeyValue.Add(key,luaBehaviour.injections[i]);
         }
     }
 
@@ -112,6 +128,7 @@ public class LuaBehaviourInspector : Editor
         if (index >= reorderableList.count)
             return;
         var luaBehaviour = target as LuaBehaviour;
+
         float x = rect.x;
         float y = rect.y + 2;
         float width = rect.width / 3;
@@ -119,33 +136,38 @@ public class LuaBehaviourInspector : Editor
         Rect objRect = new Rect(rect.x + width, rect.y, width-3, 20);
         Rect comRect = new Rect(rect.x + width * 2, rect.y, width - 3, 20);
 
-        SerializedProperty type = reorderableList.serializedProperty.GetArrayElementAtIndex(index).FindPropertyRelative("type");
-        SerializedProperty value = reorderableList.serializedProperty.GetArrayElementAtIndex(index).FindPropertyRelative("variable");
+        SerializedProperty type = reorderableList.serializedProperty.GetArrayElementAtIndex(index)
+            .FindPropertyRelative("type");
 
         if (type.intValue == 0)
         {
             //gameobject
+            Injection injection = luaBehaviour.injections[index];
+            SerializedProperty name = reorderableList.serializedProperty.GetArrayElementAtIndex(index)
+                .FindPropertyRelative("name");
 
-            SerializedProperty name = reorderableList.serializedProperty.GetArrayElementAtIndex(index).FindPropertyRelative("name");
+            SerializedProperty obj = reorderableList.serializedProperty.GetArrayElementAtIndex(index)
+                .FindPropertyRelative("obj");
+            
+            SerializedProperty comp = reorderableList.serializedProperty.GetArrayElementAtIndex(index)
+                .FindPropertyRelative("component");
 
             if (string.IsNullOrEmpty(name.stringValue))
             {
                 name.stringValue = "value" + index;
             }
             name.stringValue = EditorGUI.TextField(nameRect, name.stringValue);
-            EditorGUI.PropertyField(objRect, value, GUIContent.none);
+            EditorGUI.ObjectField(objRect, obj, GUIContent.none);
 
-            var valueObj = value.objectReferenceValue;
+            var valueObj = obj.objectReferenceValue;
             if (valueObj)
             {
-
-
-                GameObject obj = (GameObject)valueObj;
-                Component[] components = obj.GetComponents<Component>();
+                GameObject o = (GameObject)valueObj;
+                Component[] components = o.GetComponents<Component>();
                 string[] types = new string[components.Length];
-
+            
                 int selectedIndex = GetComponentIndex(components, GetCompByKey(name.stringValue));
-
+            
                 for (int i = 0; i < components.Length; i++)
                 {
                     types[i] = GetTypeName(components[i]);
@@ -156,16 +178,13 @@ public class LuaBehaviourInspector : Editor
                 if (EditorGUI.EndChangeCheck())
                 {
                     RefreshComponents(name.stringValue, components[newSelectedIndex]);
-
+            
                     EditorGUI.IntPopup(comRect, newSelectedIndex, types, null);
                     Debug.Log(newSelectedIndex);
-
+            
                 }
             }
-            else if (type.intValue == 1)
-            {
-                //others
-            }
+           
 
             //SerializedProperty name = reorderableList.serializedProperty.GetArrayElementAtIndex(index).FindPropertyRelative("name");
 
@@ -205,6 +224,10 @@ public class LuaBehaviourInspector : Editor
 
             //}
         }
+        else if (type.intValue == 1)
+        {
+            //others
+        }
     }
 
     private void AddItem(Rect rect, ReorderableList list)
@@ -218,6 +241,24 @@ public class LuaBehaviourInspector : Editor
             }, null);
         }
         menu.ShowAsContext();
+    }
+
+    private void OnRemoveItem(ReorderableList list)
+    {
+        ReorderableList.defaultBehaviours.DoRemoveButton(list);
+        Dictionary<string, object> tmp = new Dictionary<string, object>();
+        for (int i = 0; i < list.count; i++)
+        {
+            string key = list.serializedProperty.GetArrayElementAtIndex(i)
+                .FindPropertyRelative("name").stringValue;
+            if (savedKeyValue.ContainsKey(key))
+            {
+                tmp.Add(key,savedKeyValue[key]);
+            }
+        }
+        
+        savedKeyValue.Clear();
+        savedKeyValue = tmp;
     }
 
     private void OnChang(ReorderableList list)
@@ -251,9 +292,13 @@ public class LuaBehaviourInspector : Editor
 
     private Component GetCompByKey(string key)
     {
-        if (valueKey.ContainsKey(key))
+        if (savedKeyValue.ContainsKey(key))
         {
-            return valueKey[key];
+            Injection value = (Injection)savedKeyValue[key];
+            if(value!=null)
+                return value.component;
+            else
+                return null;
         }
         else
         {
@@ -263,9 +308,10 @@ public class LuaBehaviourInspector : Editor
 
     private GameObject GetObjByKey(string key)
     {
-        if (injectObjse.ContainsKey(key))
+        if (savedKeyValue.ContainsKey(key))
         {
-            return injectObjse[key];
+            Injection value = (Injection)savedKeyValue[key];
+            return value.obj;
         }
         else
         {
@@ -273,13 +319,13 @@ public class LuaBehaviourInspector : Editor
         }
     }
 
-    private void RefreshInjectObjs(string key , GameObject value = null , bool isDelete = false)
+    private void RefreshInjectObjs(string key ,object value , bool isDelete = false)
     {
         if (isDelete)
         {
-            if (injectObjse.ContainsKey(key))
+            if (savedKeyValue.ContainsKey(key))
             {
-                injectObjse.Remove(key);
+                savedKeyValue.Remove(key);
             }
             else
             {
@@ -288,42 +334,36 @@ public class LuaBehaviourInspector : Editor
         }
         else
         {
-            if (injectObjse.ContainsKey(key))
+            if (savedKeyValue.ContainsKey(key))
             {
-                Debug.LogError("the same key :" + key + ", update the value");
-                injectObjse[key] = value;
-            }
-            else
-            {
-                injectObjse.Add(key, value);
+                savedKeyValue[key] = value;
             }
         }
     }
 
-    private void RefreshComponents(string key, Component value = null, bool isDelete = false)
+    private void RefreshComponents(string key , Component curCom)
     {
-        if (isDelete)
+        if (savedKeyValue.ContainsKey(key))
         {
-            if (valueKey.ContainsKey(key))
-            {
-                valueKey.Remove(key);
-            }
-            else
-            {
-                Debug.LogError("Did not save the key :" + key);
-            }
+            Injection info = (Injection) savedKeyValue[key];
+            info.component = curCom;
         }
         else
         {
-            if (valueKey.ContainsKey(key))
-            {
-                Debug.LogError("the same key :" + key + ", update the value");
-                valueKey[key] = value;
-            }
-            else
-            {
-                valueKey.Add(key, value);
-            }
+            Debug.LogError("Did not save the key :" + key);
+        }
+    }
+    
+
+    private void AddInjectObjs(string key,object value)
+    {
+        if (savedKeyValue.ContainsKey(key))
+        {
+            Debug.LogError("Already have : " + key);
+        }
+        else
+        {
+            savedKeyValue[key] = value;
         }
     }
 
@@ -368,10 +408,8 @@ public class LuaBehaviourInspector : Editor
         string name = "value" + reorderableList.count;
         newone.name = name;
         newone.type = 0;
-        newone.variable = new VariableGameObject();
         luaBehaviour.injections.Add(newone);
-        RefreshComponents(name);
-        RefreshInjectObjs(name);
+        AddInjectObjs(name,null);
 
     }
 
