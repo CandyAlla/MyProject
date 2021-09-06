@@ -104,7 +104,7 @@ public class LuaBehaviourInspector : Editor
 
     public override void OnInspectorGUI()
     {
-        // base.OnInspectorGUI();
+        base.OnInspectorGUI();
         serializedObject.Update();
         reorderableList.DoLayoutList();
         serializedObject.ApplyModifiedProperties();
@@ -261,10 +261,7 @@ public class LuaBehaviourInspector : Editor
 
     private void OnChang(ReorderableList list)
     {
-        Debug.Log(list.count);
-        var luaBehaviour = target as LuaBehaviour;
-        //luaBehaviour.UpdateSchema();
-        //reorderableList.list = luaBehaviour.schema;
+        
     }
 
     //根据component得到对应的type的名字

@@ -36,11 +36,11 @@ namespace XLuaTest
     [LuaCallCSharp]
     public class LuaBehaviour : MonoBehaviour
     {
-        public TextAsset luaScript;
-        public List<Injection> injections = new List<Injection>();
-
         [SerializeField]
-        public List<int> intValues = new List<int>();
+        public TextAsset luaScript;
+        
+        public List<Injection> injections = new List<Injection>();
+        
 
         private  LuaEnv luaEnv = Global.luaEnv;
         float lastGCTime = 0;
@@ -65,7 +65,15 @@ namespace XLuaTest
             scriptEnv.Set("self", this);
             foreach (var injection in injections)
             {
-                scriptEnv.Set(injection.name, injection);
+                if (injection.type == 0)
+                {
+                    scriptEnv.Set(injection.name, injection.component);
+                }
+                else
+                {
+                    scriptEnv.Set(injection.name, injection.value);
+                }
+                
             }
 
             luaEnv.DoString(luaScript.text, "LuaTestScript", scriptEnv);
