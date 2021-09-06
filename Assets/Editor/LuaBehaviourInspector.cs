@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.IO;
 using UnityEngine;
 using UnityEditor;
 using UnityEditorInternal;
@@ -116,6 +117,11 @@ public class LuaBehaviourInspector : Editor
         serializedObject.Update();
         reorderableList.DoLayoutList();
         serializedObject.ApplyModifiedProperties();
+        // GUILayout.BeginVertical();
+        if (GUILayout.Button("Get Comment", GUILayout.MaxWidth(1000)))
+        {
+            GUIUtility.systemCopyBuffer = GetComponent();
+        }
     }
 
     private void InitPropertyList(SerializedProperty prop)
@@ -482,7 +488,29 @@ public class LuaBehaviourInspector : Editor
         AddInjectObjs(name,"false");
     }
 
-
+    private string GetComponent()
+    {
+        string buffer = "---@class " + luaBehaviour.luaScript.name + "\n";
+        for (int i = 0; i < luaBehaviour.injections.Count; i++)
+        {
+            var item = luaBehaviour.injections[i];
+            if (item.type == 0)
+            {
+                buffer += "---@field " + item.name + " " + item.component.GetType().FullName;
+            }
+            else
+            {
+                buffer += "---@field " + item.name + " " + valueToStr[(VariableType) item.type];
+            }
+            
+            if (i < luaBehaviour.injections.Count - 1)
+            {
+                buffer += "\n";
+            }
+        }
+        buffer += "\n" + "---The following are custom member variables";
+        return buffer;
+    }
     
 
 
