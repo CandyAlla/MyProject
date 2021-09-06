@@ -11,10 +11,11 @@ using System.Collections;
 using System.Collections.Generic;
 using XLua;
 using System;
+using Object = UnityEngine.Object;
 
 namespace XLuaTest
 {
-    [System.Serializable]
+    [Serializable]
     public class Injection
     {
         [SerializeField]
@@ -29,24 +30,8 @@ namespace XLuaTest
         public string value;
     }
 
-    public class VariableBase
-    {
-
-    }
-
-    public class VariableGameObject : VariableBase
-    {
-        [SerializeField]
-        public GameObject obj;
-        [SerializeField]
-        public Component component;
-    }
-
-    public class VariableSingle : VariableBase
-    {
-        [SerializeField]
-        public string value;
-    }
+ 
+   
 
     [LuaCallCSharp]
     public class LuaBehaviour : MonoBehaviour

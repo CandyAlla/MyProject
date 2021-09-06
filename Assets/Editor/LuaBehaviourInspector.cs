@@ -13,7 +13,7 @@ public class LuaBehaviourInspector : Editor
 {
     private enum VariableType
     {
-        Object,
+        Object = 0,
         Integer,
         FoatType,
         BooleanType,
@@ -110,7 +110,6 @@ public class LuaBehaviourInspector : Editor
 
     private void InitPropertyList(SerializedProperty prop)
     {
-        int count = reorderableList.count;
         savedKeyValue.Clear();
         
         for(int i = 0; i < reorderableList.count; i++)
@@ -142,7 +141,6 @@ public class LuaBehaviourInspector : Editor
         if (type.intValue == 0)
         {
             //gameobject
-            Injection injection = luaBehaviour.injections[index];
             SerializedProperty name = reorderableList.serializedProperty.GetArrayElementAtIndex(index)
                 .FindPropertyRelative("name");
 
@@ -184,49 +182,23 @@ public class LuaBehaviourInspector : Editor
             
                 }
             }
-           
-
-            //SerializedProperty name = reorderableList.serializedProperty.GetArrayElementAtIndex(index).FindPropertyRelative("name");
-
-            //if(string.IsNullOrEmpty(name.stringValue))
-            //{
-            //    name.stringValue = "value" + index;
-            //}
-            //name.stringValue = EditorGUI.TextField(nameRect, name.stringValue);
-            //EditorGUI.PropertyField(objRect, value, GUIContent.none);
-
-            //var valueObj = value.objectReferenceValue;
-            //if (valueObj)
-            //{
-
-
-            //    GameObject obj = (GameObject)valueObj;
-            //    Component[] components = obj.GetComponents<Component>();
-            //    string[] types = new string[components.Length];
-
-            //    int selectedIndex = GetComponentIndex(components, GetCompByKey(name.stringValue));
-
-            //    for (int i = 0; i < components.Length; i++)
-            //    {
-            //        types[i] = GetTypeName(components[i]);
-            //    }
-            //    EditorGUI.BeginChangeCheck();
-            //    int newSelectedIndex = EditorGUI.IntPopup(comRect, selectedIndex, types,null);
-            //    //Debug.Log(selectedIndex);
-            //    if (EditorGUI.EndChangeCheck())
-            //    {
-            //        RefreshComponents(name.stringValue, components[newSelectedIndex]);
-
-            //        EditorGUI.IntPopup(comRect, newSelectedIndex, types, null);
-            //        Debug.Log(newSelectedIndex);
-
-            //    }
-
-            //}
         }
-        else if (type.intValue == 1)
+        else 
         {
             //others
+            SerializedProperty name = reorderableList.serializedProperty.GetArrayElementAtIndex(index)
+                .FindPropertyRelative("name");
+
+            SerializedProperty vType = reorderableList.serializedProperty.GetArrayElementAtIndex(index).FindPropertyRelative("type");
+            
+            SerializedProperty str = reorderableList.serializedProperty.GetArrayElementAtIndex(index).FindPropertyRelative("value");
+            
+            if (string.IsNullOrEmpty(name.stringValue))
+            {
+                name.stringValue = "value" + index;
+            }
+            name.stringValue = EditorGUI.TextField(nameRect, name.stringValue);
+            str.stringValue = EditorGUI.TextField(objRect, str.stringValue);
         }
     }
 
@@ -354,7 +326,6 @@ public class LuaBehaviourInspector : Editor
         }
     }
     
-
     private void AddInjectObjs(string key,object value)
     {
         if (savedKeyValue.ContainsKey(key))
@@ -391,7 +362,11 @@ public class LuaBehaviourInspector : Editor
                 AddObjectValue();
                 break;
             case VariableType.Integer:
+            case VariableType.FoatType:
                 AddIntValue();
+                break;
+            case VariableType.BooleanType:
+                AddBooleanValue();
                 break;
             case VariableType.String:
                 AddStringValue();
@@ -403,7 +378,6 @@ public class LuaBehaviourInspector : Editor
 
     private void AddObjectValue()
     {
-        var luaBehaviour = target as LuaBehaviour;
         Injection newone = new Injection();
         string name = "value" + reorderableList.count;
         newone.name = name;
@@ -415,20 +389,35 @@ public class LuaBehaviourInspector : Editor
 
     private void AddIntValue()
     {
-        var luaBehaviour = target as LuaBehaviour;
-        luaBehaviour.injections.Add(new Injection());
+        Injection newone = new Injection();
+        string name = "value" + reorderableList.count;
+        newone.name = name;
+        newone.type = 1;
+        newone.value = "0";
+        luaBehaviour.injections.Add(newone);
+        AddInjectObjs(name,0);
     }
-
-    private void AddNumberOrBooleanValue(string typeName)
-    {
-        var luaBehaviour = target as LuaBehaviour;
-        
-    }
-
+    
     private void AddStringValue()
     {
-        var luaBehaviour = target as LuaBehaviour;
-        
+        Injection newone = new Injection();
+        string name = "value" + reorderableList.count;
+        newone.name = name;
+        newone.type = (int)VariableType.String;
+        newone.value = "";
+        luaBehaviour.injections.Add(newone);
+        AddInjectObjs(name,"");
+    }
+
+    private void AddBooleanValue()
+    {
+        Injection newone = new Injection();
+        string name = "value" + reorderableList.count;
+        newone.name = name;
+        newone.type = (int)VariableType.String;
+        newone.value = "false";
+        luaBehaviour.injections.Add(newone);
+        AddInjectObjs(name,"false");
     }
 
 
