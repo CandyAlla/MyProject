@@ -75,7 +75,9 @@ namespace XLuaTest
                 }
                 
             }
-
+            // todo 没有lua脚本 添加默认lua脚本， 进行数据存储
+            if(luaScript == null)
+                return;
             luaEnv.DoString(luaScript.text, "LuaTestScript", scriptEnv);
 
             Action luaAwake = scriptEnv.Get<Action>("awake");

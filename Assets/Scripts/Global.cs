@@ -15,5 +15,10 @@ public class Global
             return luaenv;
         }
     }
+
+    public void SwitchScene(string name)
+    {
+        
+    }
     
 }
