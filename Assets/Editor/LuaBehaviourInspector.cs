@@ -9,7 +9,9 @@ using XLuaTest;
 using XLua;
 using System.Linq;
 
-[CustomEditor(typeof(LuaBehaviour))]
+namespace  XLuaTest
+{
+    [CustomEditor(typeof(LuaBehaviour))]
 public class LuaBehaviourInspector : Editor
 {
     private enum VariableType
@@ -513,5 +515,7 @@ public class LuaBehaviourInspector : Editor
     }
     
 
+
+}
 
 }
