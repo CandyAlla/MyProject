@@ -453,7 +453,7 @@ public class LuaBehaviourInspector : Editor
         newone.name = name;
         newone.type = 0;
         luaBehaviour.injections.Add(newone);
-        AddInjectObjs(name,null);
+        AddInjectObjs(name,newone);
 
     }
 
