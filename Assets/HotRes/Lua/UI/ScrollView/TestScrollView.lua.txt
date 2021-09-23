@@ -1,0 +1,31 @@
+local Class = require "Class"
+
+local TestScrollView = Class:class(UIViewBase)
+local scrollBase = Class:class(ScrollViewBase)
+
+
+---@class ContactInfo
+---@field Name string
+---@field Gender string
+---@field id string
+
+
+local ContactInfo = Class.class()
+local info = ContactInfo.new()
+function start()
+    print(scrollBase)
+    --_recyclableScrollRect:SetPrototypeCell(item)
+
+    info.Name ="!"
+    info.Gender ="qq"
+    info.id = "1"
+    print(info)
+end
+
+function SetCell(cell , index)
+    local item = cell
+    item:ConfigureCell(info,index)
+end
+
+return TestScrollView
+

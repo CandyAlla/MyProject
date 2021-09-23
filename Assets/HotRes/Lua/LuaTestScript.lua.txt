@@ -4,23 +4,23 @@
 ---@field cube UnityEngine.Transform
 ---The following are custom member variables
 ---
-local prefab
-
-function start()
-	print(str)
-    txt.text = str
-    prefab = CS.UnityEngine.GameObject.Instantiate(cube.gameObject)
-    prefab.transform.parent = self.transform
-end
-
-function update()
-    local r = CS.UnityEngine.Vector3.up * CS.UnityEngine.Time.deltaTime 
-    prefab.transform:Rotate(r)
-end
-
-function ondestroy()
-    
-    print("lua destroy")
-    
-end
+--local prefab
+--
+--function start()
+--	print(str)
+--    txt.text = str
+--    prefab = CS.UnityEngine.GameObject.Instantiate(cube.gameObject)
+--    prefab.transform.parent = self.transform
+--end
+--
+--function update()
+--    local r = CS.UnityEngine.Vector3.up * CS.UnityEngine.Time.deltaTime
+--    prefab.transform:Rotate(r)
+--end
+--
+--function ondestroy()
+--
+--    print("lua destroy")
+--
+--end
 

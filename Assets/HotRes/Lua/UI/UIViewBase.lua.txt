@@ -1,0 +1,15 @@
+
+---@class UIViewBase
+UIViewBase = { }
+
+function UIViewBase:Awake()
+
+end
+
+function PanelBase:OnEnable()
+
+end
+
+function PanelBase:Start()
+
+end

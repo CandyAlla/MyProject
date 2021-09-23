@@ -1,0 +1,62 @@
+Class = {}
+
+function Class:class(super)
+	local classType = {}
+	
+	classType.new = function (...)
+		local o = {}
+		setmetatable(o, classType)
+		
+		if o.ctor then
+			o:ctor(...)
+		end
+		
+		return o
+	end
+	
+	classType.AddHandler = function(self, handler)
+		local handlers = self.handlers
+		if not handlers then
+			handlers = {}
+			self.handlers = handlers
+		end
+		
+		table.insert(handlers, handler)
+		return handler
+	end
+	
+	classType.RemoveHandler = function(self, handler)
+		if not self.handlers then
+			return
+		end
+		
+		for _, v in ipairs(self.handlers) do
+			if v == handler then 
+				table.removeItem(self.handlers, v)
+				v:Destroy()
+				break
+			end
+		end
+	end
+	
+	classType.UnregisterHandlers = function(self)
+		if not self.handlers then
+			return
+		end
+		
+		for _, handler in ipairs(self.handlers) do
+			handler:Destroy()
+		end
+		self.handlers = nil
+	end
+	
+	
+	if super then
+		setmetatable(classType, super)
+	end
+	
+	classType.__index = classType
+	return classType
+end
+
+return Class

@@ -1,0 +1,3 @@
+package.cpath = package.cpath .. ';C:/Users/CM164/AppData/Roaming/JetBrains/IntelliJIdea2021.2/plugins/EmmyLua/classes/debugger/emmy/windows/x64/?.dll'
+local dbg = require('emmy_core')
+dbg.tcpConnect('localhost', 4010)

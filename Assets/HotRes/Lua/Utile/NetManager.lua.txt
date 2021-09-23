@@ -1,3 +1,0 @@
-package.cpath = package.cpath .. ';/Users/zhaoxuefei/Library/Application Support/JetBrains/IntelliJIdea2021.2/plugins/EmmyLua/classes/debugger/emmy/mac/?.dylib'
-local dbg = require('emmy_core')
-dbg.tcpConnect('localhost', 9966)

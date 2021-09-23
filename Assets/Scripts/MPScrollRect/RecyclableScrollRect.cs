@@ -5,12 +5,14 @@
 using System;
 using UnityEngine;
 using UnityEngine.UI;
+using XLua;
 
 namespace MP.UI
 {
     /// <summary>
     /// Entry for the recycling system. Extends Unity's inbuilt ScrollRect.
     /// </summary>
+    [LuaCallCSharp]
     public class RecyclableScrollRect : ScrollRect
     {
         [HideInInspector]

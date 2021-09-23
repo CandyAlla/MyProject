@@ -6,6 +6,9 @@
 /// Interface for creating a Cell.
 /// Prototype Cell must have a monobeviour inheriting from ICell
 /// </summary>
+
+using XLua;
+
 namespace MP.UI
 {
     public interface ICell

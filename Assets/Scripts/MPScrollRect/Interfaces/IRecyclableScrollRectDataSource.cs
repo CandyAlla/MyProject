@@ -6,6 +6,7 @@
 /// Interface for creating DataSource
 /// Recyclable Scroll Rect must be provided a Data source which must inherit from this.
 /// </summary>
+
 namespace MP.UI
 {
     public interface IRecyclableScrollRectDataSource

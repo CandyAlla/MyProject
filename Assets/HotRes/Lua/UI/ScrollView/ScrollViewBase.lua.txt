@@ -1,0 +1,14 @@
+local Class = require "Class"
+
+GetItemCount = function  ()
+    MPScrollViewDataSourceWrap.GetItemCount()
+end
+
+SetCell = function (cell ,index)
+    MPScrollViewDataSourceWrap.SetCell(cell,index)
+end
+
+OnPressTheRoomInfoBtn = function(index ,obj)
+    MPScrollViewDataSourceWrap.OnPressTheRoomInfoBtn(index,obj)
+end
+
