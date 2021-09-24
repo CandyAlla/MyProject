@@ -50,9 +50,9 @@ namespace XLuaTest
         private Action luaUpdate;
         private Action luaOnDestroy;
 
-        private LuaTable scriptEnv;
+        protected LuaTable scriptEnv;
 
-        void Awake()
+        protected void Awake()
         {
             scriptEnv = luaEnv.NewTable();
 

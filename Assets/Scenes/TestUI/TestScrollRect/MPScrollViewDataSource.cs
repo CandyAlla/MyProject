@@ -22,15 +22,16 @@ public class MPScrollViewDataSource : LuaBehaviour , IRecyclableScrollRectDataSo
 
     private void Awake()
     {
+        base.Awake();
         _recyclableScrollRect.PrototypeCell = item;
         _recyclableScrollRect.DataSource = this;
     }
     
     private void Start()
     {
-        getCount = Global.luaEnv.Global.Get<ActGetCount>("GetItemCount");
-        setCell = Global.luaEnv.Global.Get<ActSetCell>("SetCell");
-        pressBtn = Global.luaEnv.Global.Get<ActOnPressTheRoomInfoBtn>("OnPressTheRoomInfoBtn");
+        getCount = scriptEnv.Get<ActGetCount>("GetItemCount");//;Global.luaEnv.Global.Get<ActGetCount>("GetItemCount");
+        setCell = scriptEnv.Get<ActSetCell>("SetCell");
+        pressBtn = scriptEnv.Get<ActOnPressTheRoomInfoBtn>("OnPressTheRoomInfoBtn");
        
     }
     

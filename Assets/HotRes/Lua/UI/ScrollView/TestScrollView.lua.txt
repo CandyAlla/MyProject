@@ -29,7 +29,7 @@ function SetCell(cell , index)
 end
 
 function GetItemCount()
-    print("get item count ")
+    return 2
 end
 
 function OnDestroy()

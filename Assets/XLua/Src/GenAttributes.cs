@@ -37,7 +37,8 @@ namespace XLua
 
     //生成CSharp调用Lua，加这标签
     //[AttributeUsage(AttributeTargets.Delegate | AttributeTargets.Interface)]
-    public class CSharpCallLuaAttribute : Attribute
+    public class 
+        CSharpCallLuaAttribute : Attribute
     {
     }
 
