@@ -12,7 +12,7 @@ namespace MP.UI
     /// <summary>
     /// Entry for the recycling system. Extends Unity's inbuilt ScrollRect.
     /// </summary>
-    [LuaCallCSharp]
+    // [LuaCallCSharp]
     public class RecyclableScrollRect : ScrollRect
     {
         [HideInInspector]

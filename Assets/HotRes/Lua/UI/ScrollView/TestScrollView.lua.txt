@@ -15,7 +15,8 @@ local info = ContactInfo.new()
 function start()
     print(scrollBase)
     --_recyclableScrollRect:SetPrototypeCell(item)
-
+    scrollBase.GetItemCount = GetItemCount()
+    scrollBase.SetCell = SetCell()
     info.Name ="!"
     info.Gender ="qq"
     info.id = "1"
@@ -25,6 +26,14 @@ end
 function SetCell(cell , index)
     local item = cell
     item:ConfigureCell(info,index)
+end
+
+function GetItemCount()
+    print("get item count ")
+end
+
+function OnDestroy()
+    scrollBase.GetItemCount = nil
 end
 
 return TestScrollView
