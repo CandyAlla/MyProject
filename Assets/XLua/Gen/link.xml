@@ -3,13 +3,13 @@
 <linker>
 
 	<assembly fullname="Assembly-CSharp">
-	    <type fullname="MPScrollViewDataSource" preserve="all"/>
+	    <type fullname="DemoGridCell" preserve="all"/>
+		<type fullname="MPScrollViewDataSource" preserve="all"/>
 		<type fullname="Tutorial.BaseClass" preserve="all"/>
 		<type fullname="Tutorial.TestEnum" preserve="all"/>
 		<type fullname="Tutorial.DerivedClass" preserve="all"/>
 		<type fullname="Tutorial.ICalc" preserve="all"/>
 		<type fullname="Tutorial.DerivedClassExtensions" preserve="all"/>
-		<type fullname="MP.UI.RecyclableScrollRect" preserve="all"/>
 		<type fullname="XLuaTest.LuaBehaviour" preserve="all"/>
 		<type fullname="XLuaTest.Pedding" preserve="all"/>
 		<type fullname="XLuaTest.MyStruct" preserve="all"/>

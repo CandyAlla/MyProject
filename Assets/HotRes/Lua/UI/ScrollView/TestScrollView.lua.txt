@@ -1,7 +1,7 @@
 local Class = require "Class"
 
-local TestScrollView = Class:class(UIViewBase)
-local scrollBase = Class:class(ScrollViewBase)
+local TestScrollView = Class:class(UIViewBase) --继承
+--local scrollBase = Class:class(ScrollViewBase)
 
 
 ---@class ContactInfo
@@ -11,25 +11,40 @@ local scrollBase = Class:class(ScrollViewBase)
 
 
 local ContactInfo = Class.class()
-local info = ContactInfo.new()
-function start()
-    print(scrollBase)
-    --_recyclableScrollRect:SetPrototypeCell(item)
-    scrollBase.GetItemCount = GetItemCount()
-    scrollBase.SetCell = SetCell()
-    info.Name ="!"
-    info.Gender ="qq"
-    info.id = "1"
+local info = {}
+
+function Awake()
+    --print(scrollBase)
+    ----_recyclableScrollRect:SetPrototypeCell(item)
+    print("start")
+
+    local info1 = ContactInfo.new()
+    info1.Name ="!"
+    info1.Gender ="qq"
+    info1.id = "1"
+    table.insert(info,info1)
+
+    local info2 = ContactInfo.new()
+    info2.Name ="!"
+    info2.Gender ="qq"
+    info2.id = "1"
+    table.insert(info,info2)
+
     print(info)
 end
 
 function SetCell(cell , index)
     local item = cell
-    item:ConfigureCell(info,index)
+    item:ConfigureCell(info[index+1],index) -- lua数组index 从1开始
 end
 
 function GetItemCount()
-    return 2
+    print("Get count")
+    return #info
+end
+
+function OnPressTheRoomInfoBtn(index,obj)
+    print("TestScrollRect :: OnPressTheRoomInfoBtn");
 end
 
 function OnDestroy()

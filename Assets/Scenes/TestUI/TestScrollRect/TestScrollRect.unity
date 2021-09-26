@@ -1359,7 +1359,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!114 &1668428121
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1435,9 +1435,7 @@ GameObject:
   - component: {fileID: 1986289752}
   - component: {fileID: 1986289751}
   - component: {fileID: 1986289750}
-  - component: {fileID: 1986289749}
   - component: {fileID: 1986289754}
-  - component: {fileID: 1986289755}
   m_Layer: 5
   m_Name: Canvas (1)
   m_TagString: Untagged
@@ -1445,30 +1443,6 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!114 &1986289749
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1986289748}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b9173d38911503c4a9a371b0760bdd15, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  luaScript: {fileID: 4900000, guid: 1ae4c21eb96374745bc0a5b4f37f731e, type: 3}
-  injections:
-  - name: _recyclableScrollRect
-    type: 0
-    obj: {fileID: 1613158249}
-    component: {fileID: 1613158253}
-    value: 
-  - name: item
-    type: 0
-    obj: {fileID: 1055758513}
-    component: {fileID: 0}
-    value: 
 --- !u!114 &1986289750
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1565,18 +1539,5 @@ MonoBehaviour:
   luaScript: {fileID: 4900000, guid: 1ae4c21eb96374745bc0a5b4f37f731e, type: 3}
   injections: []
   _recyclableScrollRect: {fileID: 1613158253}
+  item: {fileID: 1055758514}
   _dataLength: 0
---- !u!114 &1986289755
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1986289748}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b9173d38911503c4a9a371b0760bdd15, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  luaScript: {fileID: 4900000, guid: 6e7047e071540b246a9b82e080b62dd2, type: 3}
-  injections: []

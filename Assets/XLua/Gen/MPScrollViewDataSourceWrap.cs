@@ -21,7 +21,7 @@ namespace XLua.CSObjectWrap
         {
 			ObjectTranslator translator = ObjectTranslatorPool.Instance.Find(L);
 			System.Type type = typeof(MPScrollViewDataSource);
-			Utils.BeginObjectRegister(type, L, translator, 0, 3, 2, 2);
+			Utils.BeginObjectRegister(type, L, translator, 0, 3, 3, 3);
 			
 			Utils.RegisterFunc(L, Utils.METHOD_IDX, "GetItemCount", _m_GetItemCount);
 			Utils.RegisterFunc(L, Utils.METHOD_IDX, "SetCell", _m_SetCell);
@@ -29,9 +29,11 @@ namespace XLua.CSObjectWrap
 			
 			
 			Utils.RegisterFunc(L, Utils.GETTER_IDX, "_recyclableScrollRect", _g_get__recyclableScrollRect);
+            Utils.RegisterFunc(L, Utils.GETTER_IDX, "item", _g_get_item);
             Utils.RegisterFunc(L, Utils.GETTER_IDX, "_dataLength", _g_get__dataLength);
             
 			Utils.RegisterFunc(L, Utils.SETTER_IDX, "_recyclableScrollRect", _s_set__recyclableScrollRect);
+            Utils.RegisterFunc(L, Utils.SETTER_IDX, "item", _s_set_item);
             Utils.RegisterFunc(L, Utils.SETTER_IDX, "_dataLength", _s_set__dataLength);
             
 			
@@ -196,6 +198,20 @@ namespace XLua.CSObjectWrap
         }
         
         [MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+        static int _g_get_item(RealStatePtr L)
+        {
+		    try {
+                ObjectTranslator translator = ObjectTranslatorPool.Instance.Find(L);
+			
+                MPScrollViewDataSource gen_to_be_invoked = (MPScrollViewDataSource)translator.FastGetCSObj(L, 1);
+                translator.Push(L, gen_to_be_invoked.item);
+            } catch(System.Exception gen_e) {
+                return LuaAPI.luaL_error(L, "c# exception:" + gen_e);
+            }
+            return 1;
+        }
+        
+        [MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
         static int _g_get__dataLength(RealStatePtr L)
         {
 		    try {
@@ -219,6 +235,21 @@ namespace XLua.CSObjectWrap
 			
                 MPScrollViewDataSource gen_to_be_invoked = (MPScrollViewDataSource)translator.FastGetCSObj(L, 1);
                 gen_to_be_invoked._recyclableScrollRect = (MP.UI.RecyclableScrollRect)translator.GetObject(L, 2, typeof(MP.UI.RecyclableScrollRect));
+            
+            } catch(System.Exception gen_e) {
+                return LuaAPI.luaL_error(L, "c# exception:" + gen_e);
+            }
+            return 0;
+        }
+        
+        [MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+        static int _s_set_item(RealStatePtr L)
+        {
+		    try {
+                ObjectTranslator translator = ObjectTranslatorPool.Instance.Find(L);
+			
+                MPScrollViewDataSource gen_to_be_invoked = (MPScrollViewDataSource)translator.FastGetCSObj(L, 1);
+                gen_to_be_invoked.item = (UnityEngine.RectTransform)translator.GetObject(L, 2, typeof(UnityEngine.RectTransform));
             
             } catch(System.Exception gen_e) {
                 return LuaAPI.luaL_error(L, "c# exception:" + gen_e);
