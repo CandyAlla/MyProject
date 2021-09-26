@@ -11,7 +11,7 @@ using System.Linq;
 
 namespace  XLuaTest
 {
-    [CustomEditor(typeof(LuaBehaviour))]
+    [CustomEditor(typeof(LuaBehaviour),true)]
 public class LuaBehaviourInspector : Editor
 {
     private enum VariableType
